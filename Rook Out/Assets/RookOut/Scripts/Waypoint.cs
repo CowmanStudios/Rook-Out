@@ -54,4 +54,39 @@ public class WaypointEditor : Editor
             Handles.DrawLine(pos, endPoint, size*10);
         }
     }
+
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+
+        if(GUILayout.Button("Add Next Point"))
+        {
+            Waypoint thisWaypoint = target as Waypoint;
+            Waypoint newWaypoint = Instantiate(thisWaypoint, thisWaypoint.transform.parent);
+            newWaypoint.gameObject.name = "Waypoint";
+
+            newWaypoint.Next = thisWaypoint.Next;
+            thisWaypoint.Next = newWaypoint;
+
+            // If inserted between existing waypoints, place at the halfway mark
+            if(newWaypoint.Next != null)
+            {
+                newWaypoint.transform.position = (thisWaypoint.transform.position + newWaypoint.Next.transform.position) / 2;
+            }
+
+            Selection.activeObject = newWaypoint;
+        }
+
+        if(GUILayout.Button("Remove Next Point"))
+        {
+            Waypoint t = target as Waypoint;
+
+            if (t.Next == null) return;
+
+            Waypoint toDelete = t.Next;
+            t.Next = toDelete.Next;
+
+            DestroyImmediate(toDelete.gameObject);
+        }
+    }
 }
