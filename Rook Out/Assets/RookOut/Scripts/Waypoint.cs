@@ -40,6 +40,10 @@ public class WaypointEditor : Editor
             var nextPos = waypoint.Next.transform.position;
             var direction = nextPos - pos;
             float distance = direction.magnitude;
+
+            // Skip drawing arrow if there's no distance
+            if (distance < Mathf.Epsilon) return;
+
             direction.Normalize();
 
             // Scale the arrow head for very short distances
@@ -62,16 +66,20 @@ public class WaypointEditor : Editor
         if(GUILayout.Button("Add Next Point"))
         {
             Waypoint thisWaypoint = target as Waypoint;
-            Waypoint newWaypoint = Instantiate(thisWaypoint, thisWaypoint.transform.parent);
+            Waypoint newWaypoint = (PrefabUtility.InstantiatePrefab(WaypointSettings.GetWaypointPrefab(), thisWaypoint.transform.parent) as GameObject).GetComponent<Waypoint>();
             newWaypoint.gameObject.name = "Waypoint";
 
             newWaypoint.Next = thisWaypoint.Next;
             thisWaypoint.Next = newWaypoint;
 
             // If inserted between existing waypoints, place at the halfway mark
+            // Otherwise, place at current position
             if(newWaypoint.Next != null)
             {
                 newWaypoint.transform.position = (thisWaypoint.transform.position + newWaypoint.Next.transform.position) / 2;
+            } else
+            {
+                newWaypoint.transform.position = thisWaypoint.transform.position;
             }
 
             Selection.activeObject = newWaypoint;
