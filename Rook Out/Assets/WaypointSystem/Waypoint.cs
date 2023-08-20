@@ -6,6 +6,8 @@ using UnityEditor;
 public class Waypoint : MonoBehaviour
 {
     public Waypoint Next;
+    // ENCAPSULATION
+    public Vector3 position { get { return transform.position; } }
 
     // Start is called before the first frame update
     void Start()

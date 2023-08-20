@@ -36,7 +36,7 @@ static class WaypointSettingsIMGUIRegister
     {
         // First parameter is the path in the Settings window
         // Second parameter is the scope: it only appears in the Project Settings window
-        var provider = new SettingsProvider("Project/WaypointIMGUISettings", SettingsScope.Project)
+        var provider = new SettingsProvider("Project/WaypointSettings", SettingsScope.Project)
         {
             label = "Waypoints",
             guiHandler = (searchContext) =>
